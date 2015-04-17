@@ -10,7 +10,13 @@ var chart = d3.select(".chart")
 // var QUERY = "http://intermine.modencode.org/thalemineval/service/query/results?query=%3Cquery%20model=%22genomic%22%20view=%22Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%20Protein.proteinDomainRegions.originalDb%20Protein.proteinDomainRegions.originalId%20Protein.proteinDomainRegions.proteinDomain.primaryIde\
 // ntifier%22%20%3E%20%3Cconstraint%20path=%22Protein.primaryIdentifier%22%20op=%22=%22%20value=%22Q93V56_ARATH%22%20code=%22A%22%20/%3E%20%3C/query%3E"
 
-var QUERY = "http://intermine.modencode.org/thalemineval/service/query/results?query=%3Cquery%20name=%22%22%20model=%22genomic%22%20view=%22Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%22%20longDescription=%22%22%3E%20%3Cconstraint%20path=%22Protein.primaryIdentifier%22%20op=%22=%22%20value=%22Q93V56_ARATH%22/%3E%20%3C/query%3E"
+//var QUERY = "http://intermine.modencode.org/thalemineval/service/query/results?query=%3Cquery%20name=%22%22%20model=%22genomic%22%20view=%22Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%22%20longDescription=%22%22%3E%20%3Cconstraint%20path=%22Protein.primaryIdentifier%22%20op=%22=%22%20value=%22Q93V56_ARATH%22/%3E%20%3C/query%3E"
+var BASEURL= "http://intermine.modencode.org/thalemineval/service/query/results?query=";
+    var QUERYSTART = "%3Cquery%20name=%22%22%20model=%22genomic%22%20view=%22Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%22%20longDescription=%22%22%3E%20%3Cconstraint%20path=%22Protein.primaryIdentifier%22%20op=%22=%22%20value=%22";
+//    var ID="Q93V56_ARATH";
+    var QUERYEND="%22/%3E%20%3C/query%3E";
+    var queryId = '<%=QUERYID%>';
+var QUERY= BASEURL + QUERYSTART + queryId + QUERYEND;
 
 d3.json(QUERY, function(data) {
 
