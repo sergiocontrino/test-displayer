@@ -6,7 +6,7 @@
 //
 // TODO: scale
 //       same source all in a row?
-//       color code sources
+//       color code sources: do you need another query?
 //       add axis?
 //
 // ======================
@@ -20,7 +20,7 @@ var x = d3.scale.linear()
 var chart = d3.select(".chart")
     .attr("width", width);
 
-colors = d3.scale.category20();
+colors = d3.scale.category10();
 
 //var QUERY = "http://intermine.modencode.org/thalemineval/service/query/results?query=%3Cquery%20name=%22%22%20model=%22genomic%22%20view=%22Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%22%20longDescription=%22%22%3E%20%3Cconstraint%20path=%22Protein.primaryIdentifier%22%20op=%22=%22%20value=%22Q93V56_ARATH%22/%3E%20%3C/query%3E"
 //var QUERYSTART = "%3Cquery%20name=%22%22%20model=%22genomic%22%20view=%22Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%22%20longDescription=%22%22%3E%20%3Cconstraint%20path=%22Protein.primaryIdentifier%22%20op=%22=%22%20value=%22";
@@ -37,7 +37,7 @@ var maxValue = d3.max(data.results, function(d) { return d[1]; });
 var minValue = d3.min(data.results, function(d) { return d[0]; });
 var scaling = width / [maxValue - minValue];
 
-console.log("AAA " + minValue + "--" + maxValue+ "++" + scaling);
+// console.log("AAA " + minValue + "--" + maxValue+ "++" + scaling);
 
 x.domain([0, width]);
 
@@ -53,7 +53,7 @@ x.domain([0, width]);
  bar.append("rect")
       //.attr("width", end - begin)
       // .attr("width", function(d) { return (d[1] -d[0]) })
-      .style("fill", function(d,i){return colors(i)})
+      .style("fill", function(d,i){return colors(d[2])})
       .attr("width", function(d) { return ((d[1] -d[0])*scaling) })
       .attr("height", barHeight - 1);
 
