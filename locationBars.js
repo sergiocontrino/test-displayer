@@ -20,6 +20,8 @@ var x = d3.scale.linear()
 var chart = d3.select(".chart")
     .attr("width", width);
 
+colors = d3.scale.category20();
+
 //var QUERY = "http://intermine.modencode.org/thalemineval/service/query/results?query=%3Cquery%20name=%22%22%20model=%22genomic%22%20view=%22Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%22%20longDescription=%22%22%3E%20%3Cconstraint%20path=%22Protein.primaryIdentifier%22%20op=%22=%22%20value=%22Q93V56_ARATH%22/%3E%20%3C/query%3E"
 //var QUERYSTART = "%3Cquery%20name=%22%22%20model=%22genomic%22%20view=%22Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%22%20longDescription=%22%22%3E%20%3Cconstraint%20path=%22Protein.primaryIdentifier%22%20op=%22=%22%20value=%22";
 // var queryId ="${QUERYID}";
@@ -51,6 +53,7 @@ x.domain([0, width]);
  bar.append("rect")
       //.attr("width", end - begin)
       // .attr("width", function(d) { return (d[1] -d[0]) })
+      .style("fill", function(d,i){return colors(i)})
       .attr("width", function(d) { return ((d[1] -d[0])*scaling) })
       .attr("height", barHeight - 1);
 
