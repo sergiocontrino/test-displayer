@@ -4,21 +4,20 @@
 // 
 // note: to pass the parameter (queryId) you need to define the variable on the jsp.
 //
-// TODO: scale
+// TODO: text
 //       same source all in a row?
-//       color code sources: do you need another query?
 //       add axis?
 //
 // ======================
 
-var width = 840,
+var width = 830,
     barHeight = 20;
 
 var x = d3.scale.linear()
     .range([0, width]);
 
 var chart = d3.select(".chart")
-    .attr("width", width);
+    .attr("width", width +140);  // for the text
 
 colors = d3.scale.category10();
 
@@ -59,11 +58,11 @@ x.domain([0, width]);
 
   bar.append("text")
 //      .attr("x", function(d) { return (d[1]-20) })
-      .attr("x", 10)
+      .attr("x", 2)
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
       // .text(function(d) { return (d[1] - d[0])});
-      .text(function(d) { return (d[0] + " --> " + d[1] + "   " + d[2]+": "+ d[3])});
+      .text(function(d) { return (d[0] + ".." + d[1] + " " + d[2]+": "+ d[3])});
 
 });
 
