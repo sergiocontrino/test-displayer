@@ -4,10 +4,13 @@
 // 
 // note: to pass the parameter (queryId) you need to define the variable on the jsp.
 //
-// TODO: text
+// TODO: add axis?
 //       same source all in a row?
 //       add axis?
-//       bring displayer styling inside (from jsp)
+//       improve jsp-like styling
+//       source base url from jsp
+//       links to item in mine
+//       deal with plural/singular
 //
 // ======================
 
