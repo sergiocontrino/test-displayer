@@ -6,10 +6,8 @@
 //
 // TODO: add axis?
 //       same source all in a row?
-//       add axis?
-//       improve jsp-like styling
 //       source base url from jsp
-//       links to item in mine: TODO whole bar!
+//       links to item in mine: TODO rm underline?
 //                              note: linking to protein domain
 //       deal with plural/singular
 //
@@ -49,8 +47,8 @@ chart.attr("height", 0);
 
 // TODO: deal with 1 pdr (display ? change text (pl) )
 if (data.results.length > 0) {
-// styling
-// TODO dimensions, background color and line
+
+// styling TODO dimensions
 text = chart.append('foreignObject')
                         .attr('x', 5)
                         .attr('y', 0)
@@ -58,9 +56,8 @@ text = chart.append('foreignObject')
                         .attr('height', 200)
                         //.attr('fill', )
                         .append("xhtml:body")
-    .html('<font color="#049"><hr noshade></hr>\
-      <h3>Protein Domain Regions - source: InterPro</font></h3>\
-      <p><i>' + data.results.length + ' regions found.</i><p>')
+                        .html('<h3 class="goog"> ' + data.results.length + ' Protein Domain Regions - source: InterPro</h3>\
+                               <p> <p>');
 
   chart.attr("height", margin.top + (barHeight * data.results.length) + margin.bottom);
 }
@@ -87,10 +84,21 @@ x.domain([0, width]);
       .attr("width", function(d) { return ((d[1] -d[0])*scaling) })
       .attr("height", barHeight - 1);
 
-  bar.append("text")
+bar.append("a")
+      // .attr("xlink:href", MINEURL + PORTAL + (function(d){ return (d[4])}))
+      .on("mouseover", function(d){ 
+        d3.select(this) 
+            .attr({"xlink:href": MINEURL + PORTAL + d[4]});
+      })
+      .append("text")
       .attr("x", 2)
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
       .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": "+ d[3])});
 
+  // bar.append("text")
+  //     .attr("x", 2)
+  //     .attr("y", barHeight / 2)
+  //     .attr("dy", ".35em")
+  //     .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": "+ d[3])});
 
