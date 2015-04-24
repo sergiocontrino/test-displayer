@@ -40,6 +40,11 @@ var maxValue = d3.max(data.results, function(d) { return d[1]; });
 var minValue = d3.min(data.results, function(d) { return d[0]; });
 var scaling = width / [maxValue - minValue];
 
+// when no results don't display anything
+chart.attr("height", 0);
+
+// TODO: deal with 1 pdr (display ? change text (pl) )
+if (data.results.length > 0) {
 // styling
 // TODO dimensions, background color and line
 text = chart.append('foreignObject')
@@ -53,10 +58,10 @@ text = chart.append('foreignObject')
       <h3>Protein Domain Regions - source: InterPro</font></h3>\
       <p><i>' + data.results.length + ' regions found.</i><p>')
 
+  chart.attr("height", margin.top + (barHeight * data.results.length) + margin.bottom);
+}
 
 x.domain([0, width]);
-
-  chart.attr("height", margin.top + (barHeight * data.results.length) + margin.bottom);
 
   var bar = chart.selectAll("g")
       .data(data.results)
