@@ -50,7 +50,7 @@ if (data.results.length > 0) {
 
 // styling TODO dimensions
 text = chart.append('foreignObject')
-                        .attr('x', 5)
+                        .attr('x', 0)
                         .attr('y', 0)
                         .attr('width', width)
                         .attr('height', 200)
