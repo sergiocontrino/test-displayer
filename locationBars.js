@@ -29,10 +29,13 @@ var chart = d3.select(".chart")
 
 colors = d3.scale.category10();
 
-var BASEURL= "http://intermine.modencode.org/thalemineval/service/query/results?query=";
+var MINEURL = "http://intermine.modencode.org/thalemineval/";
+var BASEURL= MINEURL + "service/query/results?query=";
 var QUERYSTART = "%3Cquery%20model=%22genomic%22%20view=%22Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%20Protein.proteinDomainRegions.originalDb%20Protein.proteinDomainRegions.originalId%20Protein.proteinDomainRegions.proteinDomain.primaryIdentifier%22%20%3E%20%3Cconstraint%20path=%22Protein.primaryIdentifier%22%20op=%22=%22%20value=%22";
 var QUERYEND="%22/%3E%20%3C/query%3E";
 var QUERY= BASEURL + QUERYSTART + queryId + QUERYEND;
+
+var PORTAL = "portal.do?class=ProteinDomain&externalids=";
 
 d3.json(QUERY, function(data) {
 
@@ -71,7 +74,14 @@ x.domain([0, width]);
         { return "translate("+ ((d[0] - minValue)*scaling) + ","\
          + (margin.top + i * barHeight) + ")"; });
 
- bar.append("rect")
+ bar.append("a")
+      // .attr("xlink:href", MINEURL + PORTAL + (function(d){ return (d[4])}))
+      .on("mouseover", function(d, i){ 
+        d3.select(this) 
+            .attr({"xlink:href": MINEURL + PORTAL + d[4]});
+      })
+      .append("rect")
+ // bar.append("rect")
       .style("fill", function(d,i){return colors(d[2])})
       .attr("width", function(d) { return ((d[1] -d[0])*scaling) })
       .attr("height", barHeight - 1);
