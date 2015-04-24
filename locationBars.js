@@ -9,7 +9,8 @@
 //       add axis?
 //       improve jsp-like styling
 //       source base url from jsp
-//       links to item in mine
+//       links to item in mine: TODO whole bar!
+//                              note: linking to protein domain
 //       deal with plural/singular
 //
 // ======================
