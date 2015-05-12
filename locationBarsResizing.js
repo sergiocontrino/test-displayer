@@ -14,7 +14,8 @@ var PORTAL = "portal.do?class=ProteinDomain&externalids=";
 
 var svg = d3.select("#mychart");
 
-var colors = d3.scale.category20b();
+var colors = d3.scale.category20();
+//var colors = d3.scale.category10();
 
 // Will hold our data
 var alldata = null
@@ -81,7 +82,7 @@ svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
    .append("rect")
      .attr("width", function(d) { return range(d)})
      .attr("height", barHeight - 1)
-     .style("fill", function(d, i) { console.log("index is", i); return colors(i)});
+     .style("fill", function(d, i) { console.log("index is", i); return colors(d[4])});
 
   bar.append("a")
       .on("mouseover", function(d){
@@ -123,7 +124,7 @@ var rescale = function() {
   bar.select("rect")
       .attr("width", function(d) { return range(d); })
       .attr("height", barHeight - 1)
-      .style("fill", function(d, i) { return colors(i)});
+      .style("fill", function(d, i) { return colors(d[4])});
 
   // Also reposition the bars using the new scales.
   bar.select("text")
@@ -141,7 +142,7 @@ var rescale = function() {
 
 d3.json(QUERY, function(returned) {
   data = returned.results;
-  console.log("JH->" + data);
+//  console.log("JH->" + data);
   render();
 });
 
