@@ -44,7 +44,7 @@ if (data.length > 0) {
 
 // styling TODO dimensions
 // Build the report header
-text = svg.append('foreignObject')
+head = svg.append('foreignObject')
                         .attr('x', 0)
                         .attr('y', 0)
                         .attr('width', width)
@@ -73,12 +73,22 @@ svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
         return "translate(" + x(d[0]) + "," + (margin.top + (i * barHeight)) + ")";
       });
 
-  bar.append("rect")
-      .attr("width", function(d) { return range(d)})
-      .attr("height", barHeight - 1)
-      .style("fill", function(d, i) { console.log("index is", i); return colors(i)});
+  bar.append("a")
+    .on("mouseover", function(d, i){
+      d3.select(this)
+          .attr({"xlink:href": MINEURL + PORTAL + d[4]});
+    })
+   .append("rect")
+     .attr("width", function(d) { return range(d)})
+     .attr("height", barHeight - 1)
+     .style("fill", function(d, i) { console.log("index is", i); return colors(i)});
 
-  bar.append("text")
+  bar.append("a")
+      .on("mouseover", function(d){
+        d3.select(this)
+            .attr({"xlink:href": MINEURL + PORTAL + d[4]});
+      })
+     .append("text")
       .attr("x", function(d) { return range(d) - 3; })
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
