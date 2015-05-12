@@ -132,6 +132,16 @@ var rescale = function() {
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
       .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": "+ d[3]) });
+
+head = svg.append('foreignObject')
+                        .attr('x', 0)
+                        .attr('y', 0)
+                        .attr('width', newwidth)
+                        .attr('height', 200)
+                        .append("xhtml:body")
+                        .html('<h3 class="goog"> ' + data.length + ' Protein Domain Regions - source: InterPro</h3>\
+                               <p> <p>');
+
 }
 
 // Fetch our JSON and feed it to the draw function
