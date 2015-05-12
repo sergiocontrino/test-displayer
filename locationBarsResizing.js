@@ -92,7 +92,7 @@ svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
       .attr("x", function(d) { return range(d) - 3; })
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
-      .text(function(d) { return d[1]; });
+      .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": "+ d[3])});
 
 }
 
@@ -130,7 +130,7 @@ var rescale = function() {
       .attr("x", function(d) { return range(d) - 3; })
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
-      .text(function(d) { return d[1]; });
+      .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": "+ d[3]) });
 }
 
 // Fetch our JSON and feed it to the draw function
