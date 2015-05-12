@@ -19,6 +19,9 @@ var colors = d3.scale.category20b();
 // Will hold our data
 var alldata = null
 
+// margins
+var margin = {top: 40, right: 20, bottom: 30, left: 40}
+
 // Original Width
 var width = parseInt(svg.style("width"));
 
@@ -34,10 +37,31 @@ var render = function() {
   .domain([0, d3.max(data, function(d) {return d[1]})])
   .range([0, width]);
 
+// when no results don't display anything
+svg.attr("height", 0);
+
+if (data.length > 0) {
+
+// styling TODO dimensions
+// Build the report header
+text = svg.append('foreignObject')
+                        .attr('x', 0)
+                        .attr('y', 0)
+                        .attr('width', width)
+                        .attr('height', 200)
+                        //.attr('fill', )
+                        .append("xhtml:body")
+                        .html('<h3 class="goog"> ' + data.length + ' Protein Domain Regions - source: InterPro</h3>\
+                               <p> <p>');
+
+  // chart.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
+svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
+
+}
 
   // Size our SVG tall enough so that it fits each bar.
   // Width was already defined when we loaded.
-  svg.attr("height", barHeight * data.length);
+  //svg.attr("height", barHeight * data.length);
 
   // Draw our elements!!
   var bar = svg.selectAll("g")
@@ -46,7 +70,7 @@ var render = function() {
   // New bars:
   bar.enter().append("g")
       .attr("transform", function(d, i) {
-        return "translate(" + x(d[0]) + "," + i * barHeight + ")";
+        return "translate(" + x(d[0]) + "," + (margin.top + (i * barHeight)) + ")";
       });
 
   bar.append("rect")
@@ -66,7 +90,7 @@ var range = function(d) {
   var beginning = x(d[0]);
   var end = x(d[1]);
   var range = end - beginning;
-  console.log("range", end - beginning);
+  //console.log("range", end - beginning);
   return range;
 }
 
@@ -82,7 +106,7 @@ var rescale = function() {
   var bar = svg.selectAll("g").data(data)
 
   bar.attr("transform", function(d, i) {
-        return "translate(" + x(d[0]) + "," + i * barHeight + ")";
+        return "translate(" + x(d[0]) + "," + (margin.top + (i * barHeight)) + ")";
       });
 
   // For each bar group, select the rect and resposition it using the new scale.
@@ -98,8 +122,6 @@ var rescale = function() {
       .attr("dy", ".35em")
       .text(function(d) { return d[1]; });
 }
-
-
 
 // Fetch our JSON and feed it to the draw function
 // d3.json("data.json", function(returned) {
