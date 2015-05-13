@@ -1,3 +1,10 @@
+/* script used by the report page of thalemine (report.jsp), if protein
+//
+// INPUT:   the protein id (primaryIdentifier)
+// OUTPUT:  bar chart displaying the various domains associated with the protein
+//
+*/
+
 var MINEURL = "http://intermine.modencode.org/thalemineval/";
 var BASEURL= MINEURL + "service/query/results?query=";
 var QUERYSTART = "%3Cquery%20model=%22genomic%22%20view=%22" +
@@ -18,7 +25,7 @@ var colors = d3.scale.category20();
 //var colors = d3.scale.category10();
 
 // Will hold our data
-var alldata = null
+//var alldata = null
 
 // margins
 var margin = {top: 40, right: 20, bottom: 30, left: 40}
@@ -43,7 +50,6 @@ svg.attr("height", 0);
 
 if (data.length > 0) {
 
-// styling TODO dimensions
 // Build the report header
 head = svg.append('foreignObject')
                         .attr('x', 0)
@@ -55,7 +61,6 @@ head = svg.append('foreignObject')
                         .html('<h3 class="goog"> ' + data.length + ' Protein Domain Regions - source: InterPro</h3>\
                                <p> <p>');
 
-  // chart.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
 svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
 
 }
@@ -141,10 +146,10 @@ head = svg.append('foreignObject')
                         .append("xhtml:body")
                         .html('<h3 class="goog"> ' + data.length + ' Protein Domain Regions - source: InterPro</h3>\
                                <p> <p>');
-
 }
 
 // Fetch our JSON and feed it to the draw function
+
 // d3.json("data.json", function(returned) {
 //   data = returned.results;
 //   render();
@@ -152,7 +157,6 @@ head = svg.append('foreignObject')
 
 d3.json(QUERY, function(returned) {
   data = returned.results;
-//  console.log("JH->" + data);
   render();
 });
 
@@ -160,3 +164,4 @@ d3.json(QUERY, function(returned) {
 
 // Rescale it when the window resizes:
 d3.select(window).on("resize", rescale);
+
