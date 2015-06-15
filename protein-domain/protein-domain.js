@@ -10,6 +10,7 @@ var BASEURL= MINEURL + "service/query/results?query=";
 var QUERYSTART = "%3Cquery%20model=%22genomic%22%20view=%22" +
 "Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%20" +
 "Protein.proteinDomainRegions.originalDb%20Protein.proteinDomainRegions.originalId%20" +
+"Protein.proteinDomainRegions.proteinDomain.shortName%20" +
 "Protein.proteinDomainRegions.proteinDomain.primaryIdentifier%22%20%3E%20%3C" +
 // "Protein.proteinDomainRegions.proteinDomain.primaryIdentifier%20" +
 // "Protein.proteinDomainRegions.id%22%20%3E%20%3C" +
@@ -35,35 +36,43 @@ var width = parseInt(svg.style("width"));
 
 // Store our scale so that it's accessible by all:
 var x= null;
+var xAxis = null;
 
 // Static bar type:
 var barHeight = 20;
 
 var render = function() {
 
+  var max = d3.max(data, function(d) { return +d[1];} );
+
   x = d3.scale.linear()
   .domain([0, d3.max(data, function(d) {return d[1]})])
   .range([0, width]);
 
-// when no results don't display anything
-svg.attr("height", 0);
+  xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
 
-if (data.length > 0) {
+  // when no results don't display anything
+  svg.attr("height", 0);
 
-// Build the report header
-head = svg.append('foreignObject')
-                        .attr('x', 0)
-                        .attr('y', 0)
-                        .attr('width', width)
-                        .attr('height', 20)
-                        //.attr('fill', )
-                        .append("xhtml:body")
-                        .html('<h3 class="goog"> ' + data.length + ' Protein Domain Regions - source: InterPro</h3>\
-                               <p> <p>');
+  if (data.length > 0) {
 
-svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
+  // Build the report header
+    head = svg.append('foreignObject')
+      .attr("class", "myheader")    
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', width)
+      .attr('height', 20)
+      //.attr('fill', )
+      .append("xhtml:body")
+      .html('<h3 class="goog"> ' + data.length + ' Protein Domain Regions - source: InterPro</h3>\
+             <p> <p>');
 
-}
+    svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
+
+  }
 
   // Size our SVG tall enough so that it fits each bar.
   // Width was already defined when we loaded.
@@ -75,6 +84,7 @@ svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
 
   // New bars:
   bar.enter().append("g")
+      .attr("class", "proteinbar")
       .attr("transform", function(d, i) {
         return "translate(" + x(d[0]) + "," + (margin.top + (i * barHeight)) + ")";
       });
@@ -82,7 +92,7 @@ svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
   bar.append("a")
     .on("mouseover", function(d, i){
       d3.select(this)
-          .attr({"xlink:href": MINEURL + PORTAL + d[4]});
+          .attr({"xlink:href": MINEURL + PORTAL + d[5]});
     })
    .append("rect")
      .attr("width", function(d) { return range(d)})
@@ -92,13 +102,31 @@ svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
   bar.append("a")
       .on("mouseover", function(d){
         d3.select(this)
-            .attr({"xlink:href": MINEURL + PORTAL + d[4]});
+            .attr({"xlink:href": MINEURL + PORTAL + d[5]});
       })
      .append("text")
       .attr("x", function(d) { return range(d) - 3; })
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
-      .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": "+ d[3])});
+//      .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": "+ d[3] + " " + d[4])});
+      .text(function(d) { return (d[2]+": "+ d[3] + "     +   " + d[4] + " -- " + d[5])});
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", function(d, i) {
+        return "translate( 0 " + "," + (margin.top + (barHeight * data.length) +5 ) + ")"})
+       // return "translate(" + margin.right + "," + (margin.top + (barHeight * data.length) +5 ) + ")"})
+      .call(xAxis);
+
+    svg.append("rect")
+      .attr("class", "boundingbox")
+      .attr("x", 0)
+      .attr("y", (margin.top - 5))
+      .attr("height", (10 + barHeight * data.length))
+      .attr("width", width)
+      .style("stroke", "grey")
+     .style("fill", "none")
+      .style("stroke-width", 1);
 
 }
 
@@ -119,13 +147,13 @@ var rescale = function() {
   x.range([0, newwidth]);
 
   // Use our existing data:
-  var bar = svg.selectAll("g").data(data)
+  var bar = svg.selectAll(".proteinbar").data(data)
 
   bar.attr("transform", function(d, i) {
         return "translate(" + x(d[0]) + "," + (margin.top + (i * barHeight)) + ")";
       });
 
-  // For each bar group, select the rect and resposition it using the new scale.
+  // For each bar group, select the rect and reposition it using the new scale.
   bar.select("rect")
       .attr("width", function(d) { return range(d); })
       .attr("height", barHeight - 1)
@@ -136,16 +164,19 @@ var rescale = function() {
       .attr("x", function(d) { return range(d) - 3; })
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
-      .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": "+ d[3]) });
+      .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": " + d[3] + " " + d[4])});
 
-head = svg.append('foreignObject')
-                        .attr('x', 0)
-                        .attr('y', 0)
-                        .attr('width', newwidth)
-                        .attr('height', 20)
-                        .append("xhtml:body")
-                        .html('<h3 class="goog"> ' + data.length + ' Protein Domain Regions - source: InterPro</h3>\
-                               <p> <p>');
+
+  // resize the bounding box
+  var bb = svg.select(".boundingbox").attr("width", newwidth);
+
+  // resize the x axis
+  xAxis.scale(x);
+  svg.select(".x.axis").call(xAxis);
+
+// resize the header
+head = svg.select(".myheader").attr("width",newwidth);
+
 }
 
 // Fetch our JSON and feed it to the draw function
