@@ -70,13 +70,12 @@ var render = function() {
       .html('<h3 class="goog"> ' + data.length + ' Protein Domain Regions - source: InterPro</h3>\
              <p> <p>');
 
-    svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
-
-  }
 
   // Size our SVG tall enough so that it fits each bar.
   // Width was already defined when we loaded.
-  //svg.attr("height", barHeight * data.length);
+  svg.attr("height", margin.top + (barHeight * data.length) + margin.bottom);
+
+  }
 
   // Draw our elements!!
   var bar = svg.selectAll("g")
@@ -164,8 +163,8 @@ var rescale = function() {
       .attr("x", function(d) { return range(d) - 3; })
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
-      .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": " + d[3] + " " + d[4])});
-
+      // .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": " + d[3] + " " + d[4])});
+      .text(function(d) { return (d[2]+": "+ d[3] + "     +   " + d[4] + " -- " + d[5])});
 
   // resize the bounding box
   var bb = svg.select(".boundingbox").attr("width", newwidth);
