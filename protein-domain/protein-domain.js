@@ -1,6 +1,7 @@
 /* script used by the report page of thalemine (report.jsp), if protein
 //
-// INPUT:   the protein id (primaryIdentifier)
+// INPUT:   - the protein id (primaryIdentifier)
+//          - the mine url (if not present, defaults to araport)
 // OUTPUT:  bar chart displaying the various domains associated with the protein
 //
 */
