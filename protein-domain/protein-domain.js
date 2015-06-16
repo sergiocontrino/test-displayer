@@ -5,8 +5,14 @@
 //
 */
 
-var MINEURL = "http://intermine.modencode.org/thalemineval/";
-var BASEURL= MINEURL + "service/query/results?query=";
+// to set the mine: could be done inside js with injection
+// here using a parameter from jsp
+var DEFAULT_MINEURL = "https://apps.araport.org/thalemine/";
+if(typeof mineUrl === 'undefined'){
+   mineUrl = DEFAULT_MINEURL;
+ };
+
+var BASEURL = mineUrl + "/service/query/results?query=";
 var QUERYSTART = "%3Cquery%20model=%22genomic%22%20view=%22" +
 "Protein.proteinDomainRegions.start%20Protein.proteinDomainRegions.end%20" +
 "Protein.proteinDomainRegions.originalDb%20Protein.proteinDomainRegions.originalId%20" +
@@ -60,7 +66,7 @@ var render = function() {
 
   // Build the report header
     head = svg.append('foreignObject')
-      .attr("class", "myheader")    
+      .attr("class", "myheader")
       .attr('x', 0)
       .attr('y', 0)
       .attr('width', width)
@@ -69,7 +75,6 @@ var render = function() {
       .append("xhtml:body")
       .html('<h3 class="goog"> ' + data.length + ' Protein Domain Regions - source: InterPro</h3>\
              <p> <p>');
-
 
   // Size our SVG tall enough so that it fits each bar.
   // Width was already defined when we loaded.
@@ -91,30 +96,29 @@ var render = function() {
   bar.append("a")
     .on("mouseover", function(d, i){
       d3.select(this)
-          .attr({"xlink:href": MINEURL + PORTAL + d[5]});
+          .attr({"xlink:href": mineUrl + PORTAL + d[5]});
     })
-   .append("rect")
-     .attr("width", function(d) { return range(d)})
-     .attr("height", barHeight - 1)
-     .style("fill", function(d, i) { return colors(d[3])});
+    .append("rect")
+    .attr("width", function(d) { return range(d)})
+    .attr("height", barHeight - 1)
+    .style("fill", function(d, i) { return colors(d[3])});
 
   bar.append("a")
-      .on("mouseover", function(d){
-        d3.select(this)
-            .attr({"xlink:href": MINEURL + PORTAL + d[5]});
+    .on("mouseover", function(d){
+      d3.select(this)
+          .attr({"xlink:href": mineUrl + PORTAL + d[5]});
       })
-     .append("text")
-      .attr("x", function(d) { return range(d) - 3; })
-      .attr("y", barHeight / 2)
-      .attr("dy", ".35em")
+    .append("text")
+    .attr("x", function(d) { return range(d) - 3; })
+    .attr("y", barHeight / 2)
+    .attr("dy", ".35em")
 //      .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": "+ d[3] + " " + d[4])});
-      .text(function(d) { return (d[2]+": "+ d[3] + "     +   " + d[4] + " -- " + d[5])});
+    .text(function(d) { return (d[2]+": "+ d[3] + "      " + d[4] + " -- " + d[5])});
 
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", function(d, i) {
         return "translate( 0 " + "," + (margin.top + (barHeight * data.length) +5 ) + ")"})
-       // return "translate(" + margin.right + "," + (margin.top + (barHeight * data.length) +5 ) + ")"})
       .call(xAxis);
 
     svg.append("rect")
@@ -124,7 +128,7 @@ var render = function() {
       .attr("height", (10 + barHeight * data.length))
       .attr("width", width)
       .style("stroke", "grey")
-     .style("fill", "none")
+      .style("fill", "none")
       .style("stroke-width", 1);
 
 }
@@ -164,7 +168,7 @@ var rescale = function() {
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
       // .text(function(d) { return (d[0] + "..." + d[1] + " " + d[2]+": " + d[3] + " " + d[4])});
-      .text(function(d) { return (d[2]+": "+ d[3] + "     +   " + d[4] + " -- " + d[5])});
+      .text(function(d) { return (d[2]+": "+ d[3] + "    " + d[4] + " -- " + d[5])});
 
   // resize the bounding box
   var bb = svg.select(".boundingbox").attr("width", newwidth);
@@ -173,8 +177,8 @@ var rescale = function() {
   xAxis.scale(x);
   svg.select(".x.axis").call(xAxis);
 
-// resize the header
-head = svg.select(".myheader").attr("width",newwidth);
+  // resize the header
+  head = svg.select(".myheader").attr("width",newwidth);
 
 }
 
